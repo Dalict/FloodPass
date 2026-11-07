@@ -1,0 +1,13 @@
+# Build output
+target/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.classpath
+.project
+
+# External publishing copy (for pasting on distribution sites, not for the repo)
+EXTERNAL.md

@@ -1,0 +1,44 @@
+# FloodPass configuration
+# Passwordless AuthMe sign-in for Floodgate (Bedrock) players.
+
+# Language file to use: lang/messages_<language>.yml.
+# Bundled languages: en, zh_cn. Any custom file works the same way:
+# create lang/messages_zh_tw.yml, set language: zh_tw, done. Missing keys
+# fall back to English automatically.
+language: en
+
+# Master switch for automatic sign-in.
+enabled: true
+
+# Ticks to wait after join before signing the player in (20 ticks = 1 second).
+# This window lets AuthMe finish its own join processing (limbo setup, session
+# resume). Values below 10 are not recommended.
+login-delay-ticks: 20
+
+# Automatically register first-time Bedrock players with a random password and
+# sign them in right away. When disabled, unregistered Bedrock players go
+# through AuthMe's normal registration flow.
+auto-register:
+  enabled: true
+  # Random password length (8-64). Bedrock players never need to know this
+  # password; it only satisfies AuthMe's hash storage.
+  password-length: 32
+
+# AuthMe's allowedNicknameCharacters regex (default '[a-zA-Z0-9_]*') rejects
+# Bedrock players whose names carry the Floodgate prefix (for example .Steve).
+# When enabled, FloodPass re-allows such connections at the pre-login stage,
+# so AuthMe's config needs no change. Only genuine Floodgate UUIDs are exempt;
+# the regex keeps applying to Java players unchanged.
+bypass-nickname-check: true
+
+# AuthMe 6.x premium verification (enablePremium + PacketEvents) challenges any
+# connection whose LOGIN_START name matches a premium-enrolled Java account.
+# A Bedrock player whose gamertag equals such a name can never pass that
+# challenge. When enabled, FloodPass rewrites the wire username of verified
+# Floodgate connections to prefix + name, which AuthMe's own username filter
+# skips - premium keeps working for the Java account, and the Bedrock player
+# joins normally. Requires PacketEvents (soft dependency); inactive without it.
+premium-conflict-guard: true
+
+# Debug logging in the console (useful when diagnosing a setup).
+debug: false

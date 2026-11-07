@@ -1,0 +1,22 @@
+name: FloodPass
+version: 1.0.0
+main: com.dalict.floodpass.FloodPassPlugin
+api-version: '1.13'
+folia-supported: true
+description: Passwordless AuthMe sign-in for Floodgate (Bedrock) players.
+author: Dalict
+website: https://github.com/Dalict/FloodPass
+depend: [floodgate, AuthMe]
+softdepend: [packetevents]
+
+commands:
+  floodpass:
+    description: FloodPass management command.
+    usage: /<command> [reload]
+    aliases: [fpass]
+    permission: floodpass.admin
+
+permissions:
+  floodpass.admin:
+    description: Allows managing FloodPass.
+    default: op

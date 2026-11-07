@@ -1,0 +1,14 @@
+# FloodPass 消息文件（简体中文）
+# 颜色代码使用 '&'。将某条消息设为空字符串即可禁用。
+
+auto-login: "&a已通过 Xbox Live 验证，自动登录成功。"
+auto-register: "&a已通过 Xbox Live 验证，自动注册并登录成功。"
+
+command-reload-done: "&a配置与消息文件已重载。"
+command-status-header: "&bFloodPass &fv{version}"
+command-status-state: "&7启用状态: {state}"
+command-status-delay: "&7登录延迟: &f{ticks} &7tick"
+command-status-auto-register: "&7自动注册: {state}"
+command-status-usage: "&7用法: &f/{label} reload"
+command-status-enabled: "&a开启"
+command-status-disabled: "&c关闭"

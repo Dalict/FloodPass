@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.dalict</groupId>
+    <artifactId>FloodPass</artifactId>
+    <version>1.0.0</version>
+    <packaging>jar</packaging>
+
+    <name>FloodPass</name>
+    <description>Passwordless AuthMe sign-in for Floodgate (Bedrock) players.</description>
+
+    <properties>
+        <!-- Java 8 bytecode: runs on every modern server JVM (8 through 25+) -->
+        <maven.compiler.release>8</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <repositories>
+        <repository>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+        <repository>
+            <id>opencollab-snapshot</id>
+            <url>https://repo.opencollab.dev/main/</url>
+        </repository>
+        <repository>
+            <id>codemc-repo</id>
+            <url>https://repo.codemc.org/repository/maven-public/</url>
+        </repository>
+    </repositories>
+
+    <dependencies>
+        <!-- Server API. Compiled against modern Paper for availability, but the
+             plugin only touches APIs that have existed since the 1.8/1.13 era,
+             so the Java 8 bytecode runs on Spigot/Paper/Purpur/Folia alike.
+             The Folia entity scheduler is invoked defensively (see SchedulerCompat). -->
+        <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.20.4-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Floodgate 2.x API: isFloodgatePlayer(UUID) identifies Xbox-verified Bedrock players -->
+        <dependency>
+            <groupId>org.geysermc.floodgate</groupId>
+            <artifactId>api</artifactId>
+            <version>2.2.4-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- AuthMe v3 API. isRegistered / isAuthenticated / forceLogin / forceRegister
+             have identical signatures across AuthMe 5.x and 6.x, so one build covers both. -->
+        <dependency>
+            <groupId>fr.xephi</groupId>
+            <artifactId>authme</artifactId>
+            <version>5.6.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- PacketEvents: used by the premium name-collision guard (same version
+             AuthMe 6.x builds against). Soft dependency; the guard only loads
+             when PacketEvents is installed on the server. -->
+        <dependency>
+            <groupId>com.github.retrooper</groupId>
+            <artifactId>packetevents-spigot</artifactId>
+            <version>2.12.1</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Netty: Channel + AttributeKey for reading Floodgate's channel attribute.
+             Compile-time only; servers provide their own Netty. -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-transport</artifactId>
+            <version>4.1.109.Final</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>${project.name}-${project.version}</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
