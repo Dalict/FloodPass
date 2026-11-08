@@ -52,6 +52,16 @@ FloodPass 补上这个缺口：
 | AuthMe | 5.2+（v3 API） | **仅限官方 AuthMeReloaded**；已在 5.6.x 与 6.0.x 上验证 |
 | Floodgate | 2.x | 加载期硬依赖 |
 
+## 依赖插件
+
+| 插件 | 是否必需 | 版本 | 用途 |
+|------|----------|------|------|
+| [Floodgate](https://geysermc.org/download/floodgate/) | 必需 | 2.x | 通过 Xbox Live 验证基岩玩家身份，是 FloodPass 所有功能的信任基础 |
+| [AuthMe](https://www.spigotmc.org/resources/authmereloaded.6269/)（官方 [AuthMeReloaded](https://github.com/AuthMe/AuthMeReloaded)） | 必需 | 5.2+ | FloodPass 为基岩玩家登录的目标登录插件；内置基岩自动登录的分支不受支持 |
+| [PacketEvents](https://github.com/retrooper/packetevents) | 可选 | 2.x | 仅在使用 AuthMe 6.x 正版验证（`enablePremium`）时需要；用于同名碰撞防护 |
+
+> Geyser 本身不是 FloodPass 的插件依赖——基岩连接可以来自任意 Geyser 部署形态（独立端或代理端），但 Floodgate 插件必须运行在本服务器上。
+
 ## 安装
 
 1. 安装并配置好 **Geyser** 与 **Floodgate**（2.x），确保基岩玩家可以进服

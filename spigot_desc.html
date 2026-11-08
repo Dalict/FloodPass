@@ -56,14 +56,23 @@ gamepad keyboard adds no security and a lot of friction. FloodPass closes that g
 encrypted handshake with a valid Xbox Live token. A Java Edition client cannot forge that identity, so the
 passwordless path is only ever offered to players Microsoft has already verified.</p>
 
-<h2>Requirements</h2>
+<h2>Dependencies</h2>
 
 <ul>
-  <li>Spigot / Paper / Purpur / Folia <b>1.13+</b> (Java 8 bytecode)</li>
-  <li><b>Floodgate 2.x</b> (required)</li>
-  <li><b>AuthMe 5.2+</b>, official AuthMeReloaded only (tested against 5.6.x and 6.0.x)</li>
-  <li>Java 8 or newer</li>
+  <li><a href="https://geysermc.org/download/floodgate/"><b>Floodgate 2.x</b></a> &mdash; <b>required</b>.
+      Verifies Bedrock players through Xbox Live; the trust basis of every FloodPass feature</li>
+  <li><a href="https://www.spigotmc.org/resources/authmereloaded.6269/"><b>AuthMe 5.2+</b></a> (official
+      <a href="https://github.com/AuthMe/AuthMeReloaded">AuthMeReloaded</a>) &mdash; <b>required</b>.
+      The login plugin FloodPass signs Bedrock players into; forks with built-in Bedrock auto-login are
+      not supported</li>
+  <li><a href="https://github.com/retrooper/packetevents"><b>PacketEvents 2.x</b></a> &mdash; <b>optional</b>.
+      Only needed when AuthMe 6.x premium verification (<code>enablePremium</code>) is used; enables the
+      premium name-collision guard</li>
+  <li>Server: Spigot / Paper / Purpur / Folia <b>1.13+</b>, Java 8 or newer</li>
 </ul>
+
+<p>Geyser itself is not a plugin dependency of FloodPass &mdash; Bedrock connectivity can come from any Geyser
+setup (standalone or proxy), but the Floodgate plugin must run on this server.</p>
 
 <h2>Installation</h2>
 

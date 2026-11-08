@@ -77,6 +77,18 @@ In one sentence: **if Floodgate vouches for the player, FloodPass signs them in.
 
 ---
 
+## Dependencies
+
+| Plugin | Required | Version | Purpose |
+|--------|----------|---------|---------|
+| [Floodgate](https://geysermc.org/download/floodgate/) | Required | 2.x | Verifies Bedrock players through Xbox Live; the trust basis of every FloodPass feature |
+| [AuthMe](https://www.spigotmc.org/resources/authmereloaded.6269/) (official [AuthMeReloaded](https://github.com/AuthMe/AuthMeReloaded)) | Required | 5.2+ | The login plugin FloodPass signs Bedrock players into; forks with built-in Bedrock auto-login are not supported |
+| [PacketEvents](https://github.com/retrooper/packetevents) | Optional | 2.x | Only needed when AuthMe 6.x premium verification (`enablePremium`) is used; enables the premium name-collision guard |
+
+> Geyser itself is not a plugin dependency of FloodPass — Bedrock connectivity can come from any Geyser setup (standalone or proxy), but the Floodgate plugin must run on this server.
+
+---
+
 ## Installation
 
 1. Install and configure **Geyser** and **Floodgate** (2.x) so Bedrock players can join
