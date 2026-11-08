@@ -1,0 +1,14 @@
+# FloodPass messages (Thai)
+# รหัสสีใช้ '&' กำหนดข้อความว่างเปล่าเพื่อปิดใช้งานข้อความนั้น
+
+auto-login: "&aเข้าสู่ระบบอัตโนมัติผ่านการยืนยัน Xbox Live"
+auto-register: "&aลงทะเบียนและเข้าสู่ระบบอัตโนมัติผ่านการยืนยัน Xbox Live"
+
+command-reload-done: "&aโหลดการตั้งค่าและข้อความใหม่แล้ว"
+command-status-header: "&bFloodPass &fv{version}"
+command-status-state: "&7เปิดใช้งาน: {state}"
+command-status-delay: "&7ความหน่วงในการเข้าสู่ระบบ: &f{ticks} &7ทิก"
+command-status-auto-register: "&7ลงทะเบียนอัตโนมัติ: {state}"
+command-status-usage: "&7วิธีใช้: &f/{label} reload"
+command-status-enabled: "&aเปิด"
+command-status-disabled: "&cปิด"

@@ -1,0 +1,14 @@
+# FloodPass messages (Vietnamese)
+# Mã màu dùng '&'. Đặt thông báo thành chuỗi rỗng để tắt nó.
+
+auto-login: "&aĐã tự động đăng nhập qua xác minh Xbox Live."
+auto-register: "&aĐã tự động đăng ký và đăng nhập qua xác minh Xbox Live."
+
+command-reload-done: "&aĐã tải lại cấu hình và tin nhắn."
+command-status-header: "&bFloodPass &fv{version}"
+command-status-state: "&7Đã bật: {state}"
+command-status-delay: "&7Độ trễ đăng nhập: &f{ticks} &7tick"
+command-status-auto-register: "&7Tự động đăng ký: {state}"
+command-status-usage: "&7Cách dùng: &f/{label} reload"
+command-status-enabled: "&abật"
+command-status-disabled: "&ctắt"

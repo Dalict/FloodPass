@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <name>FloodPass</name>
-    <description>Passwordless AuthMe sign-in for Floodgate (Bedrock) players.</description>
+    <description>Floodgate Auto Login for AuthMe: passwordless sign-in for Floodgate (Bedrock) players.</description>
 
     <properties>
         <!-- Java 8 bytecode: runs on every modern server JVM (8 through 25+) -->

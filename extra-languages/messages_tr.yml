@@ -1,0 +1,14 @@
+# FloodPass messages (Turkish)
+# Renk kodları '&' ile kullanılır. Boş bir mesaj onu devre dışı bırakır.
+
+auto-login: "&aXbox Live doğrulaması ile otomatik olarak giriş yapıldı."
+auto-register: "&aXbox Live doğrulaması ile otomatik kayıt ve giriş yapıldı."
+
+command-reload-done: "&aYapılandırma ve mesajlar yeniden yüklendi."
+command-status-header: "&bFloodPass &fv{version}"
+command-status-state: "&7Etkin: {state}"
+command-status-delay: "&7Giriş gecikmesi: &f{ticks} &7tik"
+command-status-auto-register: "&7Otomatik kayıt: {state}"
+command-status-usage: "&7Kullanım: &f/{label} reload"
+command-status-enabled: "&aaçık"
+command-status-disabled: "&ckapalı"

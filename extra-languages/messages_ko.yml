@@ -1,0 +1,14 @@
+# FloodPass messages (Korean)
+# 색상 코드는 '&'를 사용합니다. 빈 문자열로 설정하면 메시지가 비활성화됩니다.
+
+auto-login: "&aXbox Live 인증을 통해 자동으로 로그인되었습니다."
+auto-register: "&aXbox Live 인증을 통해 자동으로 등록 및 로그인되었습니다."
+
+command-reload-done: "&a설정과 메시지가 다시 로드되었습니다."
+command-status-header: "&bFloodPass &fv{version}"
+command-status-state: "&7활성화: {state}"
+command-status-delay: "&7로그인 지연: &f{ticks} &7틱"
+command-status-auto-register: "&7자동 등록: {state}"
+command-status-usage: "&7사용법: &f/{label} reload"
+command-status-enabled: "&a켜짐"
+command-status-disabled: "&c꺼짐"

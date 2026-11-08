@@ -8,7 +8,7 @@
 
 <h1 align="center">FloodPass</h1>
 
-<p align="center">基岩版玩家免密登录 AuthMe：Xbox 验证，全自动，零输入</p>
+<p align="center">AuthMe 的 Floodgate Auto Login（基岩版自动登录）附属：Xbox 验证 · 全自动 · 零输入</p>
 
 <div align="center">
     <img src="https://img.shields.io/github/v/release/Dalict/FloodPass?color=blue&label=release" alt="Release"/>

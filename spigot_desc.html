@@ -1,0 +1,125 @@
+<!-- FloodPass resource description for SpigotMC. The SpigotMC editor does not
+     render Markdown, so this file uses plain HTML tags only. All links and
+     images use absolute URLs pointing at the GitHub repository. -->
+
+<center>
+  <img src="https://raw.githubusercontent.com/Dalict/FloodPass/main/assets/icon-256.png" alt="FloodPass" width="160"/>
+  <h2>FloodPass</h2>
+  <b>Floodgate Auto Login for AuthMe &mdash; passwordless Bedrock sign-in: Xbox-verified, automatic, zero typing</b>
+  <br/><br/>
+  <a href="https://github.com/Dalict/FloodPass/releases"><b>Download</b></a> &middot;
+  <a href="https://github.com/Dalict/FloodPass">Source</a> &middot;
+  <a href="https://github.com/Dalict/FloodPass/issues">Issues</a> &middot;
+  <a href="https://github.com/Dalict/FloodPass/blob/main/README_CN.md">简体中文文档</a>
+</center>
+
+<hr/>
+
+<p><b><font color="red">Official AuthMe only.</font></b> FloodPass is built for the original
+<a href="https://github.com/AuthMe/AuthMeReloaded">AuthMeReloaded</a> (5.x / 6.x). Do <b>not</b> install it on
+forks that already ship native Floodgate auto-login (such as
+<a href="https://github.com/HaHaWTH/AuthMeReReloaded">AuthMeReReloaded</a>) &mdash; the feature would run twice.</p>
+
+<h2>What It Does</h2>
+
+<p>Cross-play servers usually protect survival accounts with AuthMe. That works well for Java players, but
+Bedrock players arriving through Geyser + Floodgate have already proven who they are: they signed in with their
+Microsoft/Xbox account before the connection was even established. Forcing them to type a password with a
+gamepad keyboard adds no security and a lot of friction. FloodPass closes that gap:</p>
+
+<ul>
+  <li><b>For Bedrock players</b>: nothing to type, ever. Registered accounts are signed in automatically about
+      a second after joining; brand-new players are registered silently with a random password and signed in
+      the same way</li>
+  <li><b>For Java players</b>: zero change, they go through AuthMe exactly as before</li>
+  <li><b>Prefix-friendly</b>: Bedrock names carrying the Floodgate prefix (for example <code>.Steve</code>) pass
+      AuthMe's default <code>allowedNicknameCharacters</code> regex with no AuthMe config change &mdash; only
+      genuine Floodgate UUIDs are exempt</li>
+  <li><b>Premium coexistence</b>: a Bedrock player whose gamertag equals a premium-enrolled Java account
+      (<code>/premium</code>, AuthMe 6.x + PacketEvents) joins normally while the Java account keeps its
+      passwordless premium login</li>
+  <li><b>For server owners</b>: one jar, no AuthMe configuration changes, one command to manage everything</li>
+</ul>
+
+<h2>How It Works</h2>
+
+<ol>
+  <li>A player joins; Floodgate identity data for the connection is already available at that point</li>
+  <li><code>FloodgateApi#isFloodgatePlayer(uuid)</code> decides whether this is a genuine Bedrock connection;
+      Java players are never touched</li>
+  <li>After a configurable delay (20 ticks by default), AuthMe has finished its own join processing and
+      FloodPass takes over: registered players are signed in with <code>forceLogin</code>, unregistered players
+      are registered with a random password via <code>forceRegister</code> and signed in immediately</li>
+</ol>
+
+<p><b>Security basis</b>: a Floodgate identity only exists after the Bedrock client completed Floodgate's
+encrypted handshake with a valid Xbox Live token. A Java Edition client cannot forge that identity, so the
+passwordless path is only ever offered to players Microsoft has already verified.</p>
+
+<h2>Requirements</h2>
+
+<ul>
+  <li>Spigot / Paper / Purpur / Folia <b>1.13+</b> (Java 8 bytecode)</li>
+  <li><b>Floodgate 2.x</b> (required)</li>
+  <li><b>AuthMe 5.2+</b>, official AuthMeReloaded only (tested against 5.6.x and 6.0.x)</li>
+  <li>Java 8 or newer</li>
+</ul>
+
+<h2>Installation</h2>
+
+<ol>
+  <li>Install and configure <b>Geyser</b> and <b>Floodgate</b> (2.x) so Bedrock players can join</li>
+  <li>Install the <b>official AuthMe</b> (AuthMeReloaded, 5.2+) and configure it as usual for your Java players</li>
+  <li>Drop <code>FloodPass-x.x.x.jar</code> into <code>plugins/</code> and restart the server</li>
+</ol>
+
+<p>Verify with a Bedrock account: the first join should say <i>"Registered and signed in automatically"</i>,
+the next join <i>"Signed in automatically"</i>.</p>
+
+<h2>Commands and Permissions</h2>
+
+<ul>
+  <li><code>/floodpass</code> &mdash; show status &mdash; <code>floodpass.admin</code> (default OP)</li>
+  <li><code>/floodpass reload</code> &mdash; reload config.yml and the active language file &mdash;
+      <code>floodpass.admin</code></li>
+  <li>Alias: <code>/fpass</code></li>
+</ul>
+
+<h2>Configuration</h2>
+
+<ul>
+  <li><code>language</code> (default <code>en</code>) &mdash; which <code>lang/messages_&lt;language&gt;.yml</code>
+      to use; bundled: <code>en</code>, <code>zh_cn</code>; any custom language file works too</li>
+  <li><code>enabled</code> (default <code>true</code>) &mdash; master switch for automatic sign-in</li>
+  <li><code>login-delay-ticks</code> (default <code>20</code>) &mdash; ticks to wait after join; keep at 10 or above</li>
+  <li><code>auto-register.enabled</code> (default <code>true</code>) &mdash; register first-time Bedrock players
+      automatically with a random password</li>
+  <li><code>auto-register.password-length</code> (default <code>32</code>) &mdash; random password length (8-64);
+      Bedrock players never need to know it</li>
+  <li><code>bypass-nickname-check</code> (default <code>true</code>) &mdash; re-allow Bedrock players denied by
+      AuthMe's <code>allowedNicknameCharacters</code>; only genuine Floodgate UUIDs are exempt</li>
+  <li><code>premium-conflict-guard</code> (default <code>true</code>) &mdash; keep Bedrock players joinable when
+      their gamertag equals a premium-enrolled Java account</li>
+  <li><code>debug</code> (default <code>false</code>) &mdash; console logging of every sign-in decision</li>
+</ul>
+
+<h2>Known Limitations</h2>
+
+<ul>
+  <li>Bedrock accounts are stored under their Floodgate-prefixed name; changing the Floodgate username prefix
+      later breaks the name mapping and requires an AuthMe database migration</li>
+  <li><code>forceLogin</code> bypasses AuthMe two-factor authentication for Bedrock accounts &mdash; intended
+      for Xbox-verified identities</li>
+  <li>On AuthMe 6.x with the experimental dialog login UI (Minecraft 1.21.6+), the login dialog may flash
+      briefly before the delayed auto sign-in completes</li>
+  <li>AuthMe's <code>/premium</code> command targets Java accounts and is safely rejected for regular Bedrock
+      players &mdash; they do not need it, FloodPass already signs them in</li>
+</ul>
+
+<hr/>
+
+<center>
+  <b>Author:</b> <a href="https://github.com/Dalict">Dalict</a> &middot;
+  <b>License:</b> <a href="https://github.com/Dalict/FloodPass/blob/main/LICENSE">MIT</a> &middot;
+  <b>Downloads:</b> <a href="https://github.com/Dalict/FloodPass/releases">GitHub Releases</a>
+</center>

@@ -8,7 +8,7 @@
 
 <h1 align="center">FloodPass</h1>
 
-<p align="center">Passwordless AuthMe sign-in for Bedrock players: Xbox-verified, automatic, zero typing</p>
+<p align="center">Floodgate Auto Login for AuthMe — passwordless Bedrock sign-in: Xbox-verified, automatic, zero typing</p>
 
 <div align="center">
     <img src="https://img.shields.io/github/v/release/Dalict/FloodPass?color=blue&label=release" alt="Release"/>
