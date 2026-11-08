@@ -11,3 +11,5 @@ target/
 
 # External publishing copy (for pasting on distribution sites, not for the repo)
 EXTERNAL.md
+EXTERNAL*.md
+spigot_desc.*
