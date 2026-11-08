@@ -123,7 +123,6 @@ Alias: `/fpass`
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `language` | `en` | Which `lang/messages_<language>.yml` to use. Not limited to bundled languages: drop any `messages_<language>.yml` (for example a self-made `messages_zh_tw.yml`) into `lang/`, set this to `zh_tw`, and it loads; missing keys fall back to English |
 | `enabled` | `true` | Master switch for automatic sign-in |
 | `login-delay-ticks` | `20` | Ticks to wait after join before signing in; must leave AuthMe time to finish join processing, keep at 10 or above |
 | `auto-register.enabled` | `true` | Register first-time Bedrock players automatically; disable to send them through AuthMe's normal registration flow |

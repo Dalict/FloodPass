@@ -123,7 +123,6 @@ FloodPass 补上这个缺口：
 
 | 选项 | 默认值 | 说明 |
 |------|--------|------|
-| `language` | `en` | 使用 `lang/` 目录下的哪份 `messages_<语言>.yml`。**不限于内置语言**：自己制作任意语言文件（如 `messages_zh_tw.yml`）放进 `lang/`，配置 `language: zh_tw` 即可生效；缺失的键自动回落英文 |
 | `enabled` | `true` | 自动登录总开关 |
 | `login-delay-ticks` | `20` | 进服后等待多少 tick 再登录；必须给 AuthMe 留足进服处理时间，建议不低于 10 |
 | `auto-register.enabled` | `true` | 自动注册首次进服的基岩玩家；关闭后走 AuthMe 正常注册流程 |
