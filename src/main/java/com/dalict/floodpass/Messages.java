@@ -46,7 +46,10 @@ public final class Messages {
      * files are extracted as templates; it never restricts what
      * {@code language} may reference.
      */
-    private static final String[] BUNDLED_LANGUAGES = {"en", "zh_cn"};
+    private static final String[] BUNDLED_LANGUAGES = {
+            "en", "zh_cn", "ru", "es", "pt_br", "de", "fr", "zh_tw", "ja", "ko",
+            "tr", "pl", "it", "nl", "vi", "th", "id"
+    };
 
     /** All keys the plugin reads from a language file. */
     private static final String[] KNOWN_KEYS = {

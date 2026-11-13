@@ -30,6 +30,7 @@ public final class FloodPassPlugin extends JavaPlugin implements CommandExecutor
     @Override
     public void onEnable() {
         saveDefaultConfig();
+        selfHealConfiguration();
 
         // Hard dependencies are already guaranteed by plugin.yml; this is only
         // a defensive check with a readable message.
@@ -97,6 +98,7 @@ public final class FloodPassPlugin extends JavaPlugin implements CommandExecutor
             // Re-extract a deleted config.yml and any deleted bundled language
             // file; both calls never overwrite existing files.
             saveDefaultConfig();
+            selfHealConfiguration();
             messages.extractBundledLanguages();
             reloadConfig();
             settings = Settings.load(getConfig());
@@ -175,6 +177,18 @@ public final class FloodPassPlugin extends JavaPlugin implements CommandExecutor
                     + " premium-enrolled Java account can join (prefix rewrite at LOWEST priority).");
         } catch (Throwable error) {
             getLogger().warning("Failed to register the premium conflict guard: " + error);
+        }
+    }
+
+    /**
+     * Runs the config self-healing pass; never throws, so a broken or exotic
+     * configuration can never prevent the plugin (or the server) from starting.
+     */
+    private void selfHealConfiguration() {
+        try {
+            ConfigSelfHealer.heal(this);
+        } catch (Throwable error) {
+            getLogger().warning("Config self-healing skipped due to an unexpected error: " + error);
         }
     }
 

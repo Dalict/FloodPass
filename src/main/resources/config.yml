@@ -42,3 +42,7 @@ premium-conflict-guard: true
 
 # Debug logging in the console (useful when diagnosing a setup).
 debug: false
+
+# Internal layout version used by the config self-healing mechanism.
+# Do not change this manually.
+config-version: 2

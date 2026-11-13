@@ -1,5 +1,5 @@
 name: FloodPass
-version: 1.0.0
+version: 1.0.1
 main: com.dalict.floodpass.FloodPassPlugin
 api-version: '1.13'
 folia-supported: true
