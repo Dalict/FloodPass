@@ -8,7 +8,7 @@
 
 <h1 align="center">FloodPass</h1>
 
-<p align="center">AuthMe 的 Floodgate Auto Login（基岩版自动登录）附属：Xbox 验证 · 全自动 · 零输入</p>
+<p align="center">AuthMe 的 Floodgate Auto Login（基岩版自动登录）附属：Xbox 验证 让基岩版无需输入密码</p>
 
 <div align="center">
     <img src="https://img.shields.io/github/v/release/Dalict/FloodPass?color=blue&label=release" alt="Release"/>
@@ -35,9 +35,9 @@
 
 ## 插件定位
 
-互通服务器通常用 AuthMe 保护生存账号。这对 Java 玩家没问题，但通过 Geyser + Floodgate 接入的基岩玩家在连接建立之前就已经用微软 / Xbox 账户证明了自己的身份。再逼他们用手柄键盘输一遍密码，既没有增加安全性，又徒增麻烦。
+互通服务器通常用 AuthMe 保护生存账号。这对 Java 玩家没问题，但通过 Geyser + Floodgate 接入的基岩玩家在连接建立之前就已经用微软 / Xbox 账户证明了自己的身份。还要让他们输一遍密码，多此一举。
 
-FloodPass 补上这个缺口：
+FloodPass 就补上了这个问题：
 
 - **对基岩玩家**：从头到尾什么都不用输。已注册的账号在进服约一秒后自动登录；全新玩家静默地以随机密码注册并直接登录
 - **对 Java 玩家**：零影响，照常走 AuthMe 原有流程
@@ -45,13 +45,19 @@ FloodPass 补上这个缺口：
 - **与 /premium 共存**：基岩玩家的游戏 ID 与已启用正版验证（`/premium`，AuthMe 6.x + PacketEvents）的 Java 账号同名时，基岩侧照常进服、Java 侧保留免密正版登录——一个名字两种身份，互不冲突
 - **对服主**：一个 jar，不需要改任何 AuthMe 配置，一条命令管理全部；信任判断交还给本该负责的一方（Floodgate 的 Xbox Live 验证）
 
-一句话：**Floodgate 认可的玩家，FloodPass 直接放行。**
+一句话：**Floodgate 认证的玩家，FloodPass 直接放行，不经过 AuthMe 密码登录**
+
+---
+
+## 基岩版玩家加入的效果图
+
+![示例图](rendering.png)
 
 ---
 
 ## 工作原理
 
-1. 玩家进服，FloodPass 以 `MONITOR` 优先级监听，此时该连接的 Floodgate 身份数据已经就绪
+1. 玩家进服，FloodPass 以 `MONITOR` 优先级监听，此时该连接的 Floodgate 身份数据已经就绪。
 2. 用 `FloodgateApi#isFloodgatePlayer(uuid)` 判断是否真正的基岩连接；Java 玩家不安排任何任务，完全不受影响
 3. 等待可配置的延迟（默认 20 tick），让 AuthMe 完成它自己的进服处理（limbo 建立、会话恢复），然后 FloodPass 接管：
    - 已注册玩家：`AuthMeApi#forceLogin` 免密码登录
@@ -83,7 +89,7 @@ FloodPass 补上这个缺口：
 |------|----------|------|------|
 | [Floodgate](https://geysermc.org/download/floodgate/) | 必需 | 2.x | 通过 Xbox Live 验证基岩玩家身份，是 FloodPass 所有功能的信任基础 |
 | [AuthMe](https://www.spigotmc.org/resources/authmereloaded.6269/)（官方 [AuthMeReloaded](https://github.com/AuthMe/AuthMeReloaded)） | 必需 | 5.2+ | FloodPass 为基岩玩家登录的目标登录插件；内置基岩自动登录的分支不受支持 |
-| [PacketEvents](https://github.com/retrooper/packetevents) | 可选 | 2.x | 仅在使用 AuthMe 6.x 正版验证（`enablePremium`）时需要；用于同名碰撞防护 |
+| [PacketEvents](https://github.com/retrooper/packetevents) | 可选 | 2.x | 仅在使用 AuthMe 6.x 正版验证（`enablePremium`）时需要 |
 
 > Geyser 本身不是 FloodPass 的插件依赖——基岩连接可以来自任意 Geyser 部署形态（独立端或代理端），但 Floodgate 插件必须运行在本服务器上。
 
@@ -111,40 +117,6 @@ FloodPass 补上这个缺口：
 
 ---
 
-## 配置
-
-| 文件 | 内容 |
-|------|------|
-| `plugins/FloodPass/config.yml` | 全部行为设置（见下） |
-| `plugins/FloodPass/lang/messages_en.yml` | 英文玩家消息 |
-| `plugins/FloodPass/lang/messages_zh_cn.yml` | 简体中文玩家消息 |
-
-### config.yml
-
-| 选项 | 默认值 | 说明 |
-|------|--------|------|
-| `enabled` | `true` | 自动登录总开关 |
-| `login-delay-ticks` | `20` | 进服后等待多少 tick 再登录；必须给 AuthMe 留足进服处理时间，建议不低于 10 |
-| `auto-register.enabled` | `true` | 自动注册首次进服的基岩玩家；关闭后走 AuthMe 正常注册流程 |
-| `auto-register.password-length` | `32` | 随机注册密码长度（8-64）；基岩玩家永远不需要知道它 |
-| `bypass-nickname-check` | `true` | 恢复被 AuthMe 的 `allowedNicknameCharacters` 在预登录阶段拒绝的基岩玩家；只豁免真正的 Floodgate UUID，Java 玩家仍按正则校验 |
-| `premium-conflict-guard` | `true` | 基岩玩家游戏 ID 与已注册 premium 的 Java 账号同名时仍可进服（AuthMe 6.x + PacketEvents）；改写已验证 Floodgate 连接的登录包用户名，使 AuthMe 的 premium 挑战对其跳过 |
-| `debug` | `false` | 在控制台记录每一次登录决策，用于排查 |
-
-消息支持 `&` 颜色代码；设为空字符串即禁用该条消息。
-
----
-
-## 构建
-
-```bash
-mvn package          # 产物 target/FloodPass-x.x.x.jar
-```
-
-需要支持 Java 8 编译目标的 JDK（任何现代 JDK 均可）；产物可在 Java 8 及以上运行。
-
----
-
 ## 设计说明
 
 - **延迟执行而非进服瞬间强登**：在 `PlayerJoinEvent` 里直接调 `AuthMeApi#forceLogin` 会与 AuthMe 自身的异步进服处理竞争。FloodPass 等待（默认 20 tick），与具备原生基岩支持的 AuthMe 分支做法一致——这也是不建议随意调低 `login-delay-ticks` 的原因
@@ -156,7 +128,7 @@ mvn package          # 产物 target/FloodPass-x.x.x.jar
 
 ## 已知限制
 
-- 基岩账号以带 Floodgate 前缀的名字存储（默认前缀下如 `.Steve`）。**日后修改 Floodgate 用户名前缀会破坏既有账号的名字映射**，需要迁移 AuthMe 数据
+- 基岩账号以带 Floodgate 前缀的名字存储（默认前缀下如 `.Steve`）。**日后修改 Floodgate 用户名前缀会破坏既有账号的名字映射**，需要迁移 AuthMe 数据，或者不用理它，自动随机密码注册。
 - `bypass-nickname-check` 依靠踢出消息中内嵌的正则来识别 AuthMe 的拒绝；若你自定义了 AuthMe 的 `invalid_name_characters` 消息，请保留 `%reg` 标签，否则识别将失效
 - 若 Floodgate 的 `username-prefix` 为空，同名碰撞防护无法区分两种身份——且 AuthMe 本身也会把两个账号存为同名，该场景不受支持
 - AuthMe 的昵称长度上限（`maxNickLength`，默认 20）不在绕过范围内；带前缀的基岩名（前缀 + 16 字符游戏 ID = 最长 17）在默认值下不受影响
@@ -171,13 +143,9 @@ mvn package          # 产物 target/FloodPass-x.x.x.jar
 
 MIT License，见 [LICENSE](LICENSE)。
 
-## 贡献者
-
-| 贡献者 | 角色 |
-|--------|------|
-| [Dalict](https://github.com/Dalict) | 作者 / 主要维护者 |
-
 ## 支持与反馈
+
+希望这个插件能帮助大家哦~我也是为了使用官方版 AuthMe，但我的服务器是互通，才制作它的。有什么问题尽量反馈哦，谢谢啦！ouo
 
 - 问题反馈：[GitHub Issues](https://github.com/Dalict/FloodPass/issues)
 - 源码仓库：[https://github.com/Dalict/FloodPass](https://github.com/Dalict/FloodPass)

@@ -14,3 +14,5 @@ EXTERNAL.md
 EXTERNAL*.md
 spigot_desc.*
 CHANGELOG.md
+spigot_changelog.txt
+build-*.log

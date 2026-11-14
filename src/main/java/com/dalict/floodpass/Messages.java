@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.StandardCharsets;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -66,8 +67,14 @@ public final class Messages {
     };
 
     private final JavaPlugin plugin;
-    private final Map<String, String> entries = new HashMap<String, String>();
-    private String loadedLanguage = DEFAULT_LANGUAGE;
+    /**
+     * Immutable snapshot of the active messages. Replaced as a whole on
+     * reload so readers on other threads (Folia region threads schedule the
+     * auto sign-in task) always see a complete map, never a partially
+     * filled one.
+     */
+    private volatile Map<String, String> entries = Collections.emptyMap();
+    private volatile String loadedLanguage = DEFAULT_LANGUAGE;
 
     public Messages(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -106,7 +113,7 @@ public final class Messages {
         YamlConfiguration sameLanguage = readBundled(lang);
         YamlConfiguration english = DEFAULT_LANGUAGE.equals(lang) ? null : readBundled(DEFAULT_LANGUAGE);
 
-        entries.clear();
+        Map<String, String> fresh = new HashMap<String, String>();
         for (String key : KNOWN_KEYS) {
             String value = disk.getString(key);
             if (value == null && sameLanguage != null) {
@@ -117,8 +124,10 @@ public final class Messages {
             }
             // A key present on disk but empty means "message disabled" and is
             // respected; genuinely missing keys fall back above.
-            entries.put(key, value == null ? "" : value);
+            fresh.put(key, value == null ? "" : value);
         }
+        // Publish the finished snapshot atomically; never mutated afterwards
+        entries = fresh;
         loadedLanguage = lang;
         plugin.getLogger().info("Loaded messages from " + LANG_FOLDER + "/" + fileNameFor(lang) + ".");
     }

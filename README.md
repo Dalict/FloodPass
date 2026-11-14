@@ -8,7 +8,7 @@
 
 <h1 align="center">FloodPass</h1>
 
-<p align="center">Floodgate Auto Login for AuthMe — passwordless Bedrock sign-in: Xbox-verified, automatic, zero typing</p>
+<p align="center">Floodgate Auto Login for AuthMe — Xbox-verified, so Bedrock players never type a password</p>
 
 <div align="center">
     <img src="https://img.shields.io/github/v/release/Dalict/FloodPass?color=blue&label=release" alt="Release"/>
@@ -35,9 +35,9 @@
 
 ## What It Does
 
-Cross-play servers usually protect survival accounts with AuthMe. That works well for Java players, but Bedrock players arriving through Geyser + Floodgate have already proven who they are: they signed in with their Microsoft/Xbox account before the connection was even established. Forcing them to type a password with a gamepad keyboard adds no security and a lot of friction.
+Cross-play servers usually protect survival accounts with AuthMe. That works well for Java players, but Bedrock players arriving through Geyser + Floodgate have already proven who they are: they signed in with their Microsoft/Xbox account before the connection was even established. Making them type a password anyway is simply unnecessary.
 
-FloodPass closes that gap:
+FloodPass solves exactly that:
 
 - **For Bedrock players**: nothing to type, ever. Registered accounts are signed in automatically about a second after joining; brand-new players are registered silently with a random password and signed in the same way
 - **For Java players**: zero change, they go through AuthMe exactly as before
@@ -45,7 +45,13 @@ FloodPass closes that gap:
 - **Premium coexistence**: a Bedrock player whose gamertag equals a premium-enrolled Java account (`/premium`, AuthMe 6.x + PacketEvents) joins normally while the Java account keeps its passwordless premium login — both identities, one name, no conflict
 - **For server owners**: one jar, no AuthMe configuration changes, one command to manage everything; the trust decision stays where it belongs (Floodgate's Xbox Live verification)
 
-In one sentence: **if Floodgate vouches for the player, FloodPass signs them in.**
+In one sentence: **a player verified by Floodgate goes straight in, without AuthMe password login.**
+
+---
+
+## Screenshot of a Bedrock Player Joining
+
+![preview](rendering.png)
 
 ---
 
@@ -83,7 +89,7 @@ In one sentence: **if Floodgate vouches for the player, FloodPass signs them in.
 |--------|----------|---------|---------|
 | [Floodgate](https://geysermc.org/download/floodgate/) | Required | 2.x | Verifies Bedrock players through Xbox Live; the trust basis of every FloodPass feature |
 | [AuthMe](https://www.spigotmc.org/resources/authmereloaded.6269/) (official [AuthMeReloaded](https://github.com/AuthMe/AuthMeReloaded)) | Required | 5.2+ | The login plugin FloodPass signs Bedrock players into; forks with built-in Bedrock auto-login are not supported |
-| [PacketEvents](https://github.com/retrooper/packetevents) | Optional | 2.x | Only needed when AuthMe 6.x premium verification (`enablePremium`) is used; enables the premium name-collision guard |
+| [PacketEvents](https://github.com/retrooper/packetevents) | Optional | 2.x | Only needed when AuthMe 6.x premium verification (`enablePremium`) is used |
 
 > Geyser itself is not a plugin dependency of FloodPass — Bedrock connectivity can come from any Geyser setup (standalone or proxy), but the Floodgate plugin must run on this server.
 
@@ -111,40 +117,6 @@ Alias: `/fpass`
 
 ---
 
-## Configuration
-
-| File | Contents |
-|------|----------|
-| `plugins/FloodPass/config.yml` | All behavior settings (below) |
-| `plugins/FloodPass/lang/messages_en.yml` | English player-facing messages |
-| `plugins/FloodPass/lang/messages_zh_cn.yml` | Simplified Chinese player-facing messages |
-
-### config.yml
-
-| Option | Default | Description |
-|--------|---------|-------------|
-| `enabled` | `true` | Master switch for automatic sign-in |
-| `login-delay-ticks` | `20` | Ticks to wait after join before signing in; must leave AuthMe time to finish join processing, keep at 10 or above |
-| `auto-register.enabled` | `true` | Register first-time Bedrock players automatically; disable to send them through AuthMe's normal registration flow |
-| `auto-register.password-length` | `32` | Length of the random registration password (8-64); Bedrock players never need to know it |
-| `bypass-nickname-check` | `true` | Re-allow Bedrock players denied at pre-login by AuthMe's `allowedNicknameCharacters`; only genuine Floodgate UUIDs are exempt, Java players are still checked against the regex |
-| `premium-conflict-guard` | `true` | Let Bedrock players join when their gamertag equals a premium-enrolled Java account (AuthMe 6.x + PacketEvents); rewrites the login-packet username of verified Floodgate connections so AuthMe's premium challenge is skipped for them |
-| `debug` | `false` | Console logging of every sign-in decision, for diagnosing setups |
-
-Messages support `&` color codes; setting a message to an empty string disables it. 
-
----
-
-## Building
-
-```bash
-mvn package          # output: target/FloodPass-x.x.x.jar
-```
-
-Requires a JDK with Java 8 target support (any modern JDK works); the result runs on Java 8 and newer.
-
----
-
 ## Design Notes
 
 - **Delayed execution instead of join-time forcing**: calling `AuthMeApi#forceLogin` directly inside `PlayerJoinEvent` races against AuthMe's own asynchronous join processing. FloodPass waits (20 ticks by default), which mirrors the approach of AuthMe forks with native Bedrock support, and the delay is why `login-delay-ticks` should not be lowered carelessly
@@ -156,7 +128,7 @@ Requires a JDK with Java 8 target support (any modern JDK works); the result run
 
 ## Known Limitations
 
-- Bedrock accounts are stored under their Floodgate-prefixed name (for example `.Steve` with the default prefix). **Changing the Floodgate username prefix later breaks the name mapping** for existing accounts and requires an AuthMe database migration
+- Bedrock accounts are stored under their Floodgate-prefixed name (for example `.Steve` with the default prefix). **Changing the Floodgate username prefix later breaks the name mapping** for existing accounts and requires an AuthMe database migration — or you can simply leave it as is: the player is automatically re-registered with a fresh random password
 - `bypass-nickname-check` recognizes AuthMe's deny by the pattern embedded in its kick message; if you customize AuthMe's `invalid_name_characters` message, keep the `%reg` tag so detection continues to work
 - With an empty Floodgate `username-prefix` the premium conflict guard cannot tell the two identities apart — and AuthMe itself would store both accounts under the same name, which is unsupported
 - AuthMe's nickname length limits (`maxNickLength`, default 20) are not bypassed; prefixed Bedrock names (prefix + 16-char gamertag = 17 max) fit the default
@@ -171,13 +143,9 @@ Requires a JDK with Java 8 target support (any modern JDK works); the result run
 
 MIT License, see [LICENSE](LICENSE).
 
-## Author
-
-| Contributor | Role |
-|-------------|------|
-| [Dalict](https://github.com/Dalict) | Author / maintainer |
-
 ## Support and Feedback
+
+I hope this plugin helps you all! I built it because I run a cross-play server and want to keep using the official AuthMe. If you run into anything, please do leave feedback — thank you! ouo
 
 - Issues: [GitHub Issues](https://github.com/Dalict/FloodPass/issues)
 - Repository: [https://github.com/Dalict/FloodPass](https://github.com/Dalict/FloodPass)
