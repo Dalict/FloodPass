@@ -106,6 +106,34 @@ In one sentence: **a player verified by Floodgate goes straight in, without Auth
 
 ---
 
+## Running Behind a Proxy (Velocity / BungeeCord)
+
+This gets asked a lot, so here is the short version.
+
+FloodPass is not a proxy plugin. Do not put it into the plugins folder of Velocity or BungeeCord, it will not load there. It goes wherever AuthMe goes: on the backend server that runs AuthMe.
+
+Who sits where:
+
+| Component | Proxy | Backend (the server running AuthMe) |
+|-----------|-------|-------------------------------------|
+| Geyser | install | not needed |
+| Floodgate | install | **install too** (same key.pem as the proxy) |
+| AuthMe | no | install |
+| FloodPass | no | install |
+
+Why does the backend need its own Floodgate? The one on the proxy only encrypts and forwards the Bedrock identity. The one on the backend is what actually decrypts it, so backend plugins can tell who is a Bedrock player. With Floodgate only on the proxy, backend plugins cannot recognize Bedrock players. The same goes for any backend plugin that adapts to Bedrock.
+
+About the key.pem: copy the one from the proxy's Floodgate into the Floodgate folder of every backend. Both sides must have the exact same file.
+
+Two more small things:
+
+- On Velocity, enable modern forwarding and make sure the forwarding-secret matches the backend's Paper config, or the identity never arrives
+- If you use AuthMe's /premium, the proxy also needs the official authme-velocity, and the backend AuthMe needs `Hooks.bungeecord: true` plus the same `proxySharedSecret`
+
+When you are done, connect with a Bedrock client to Geyser's port (UDP 19132 by default). You should see the auto sign-in message about a second after joining.
+
+---
+
 ## Commands and Permissions
 
 | Command | Permission | Description |

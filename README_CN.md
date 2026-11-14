@@ -106,6 +106,34 @@ FloodPass 就补上了这个问题：
 
 ---
 
+## 代理网络（Velocity / BungeeCord）怎么装
+
+问得最多的问题，一次说清楚。
+
+FloodPass 不是代理插件。别放进 Velocity 或 BungeeCord 的 plugins 文件夹，放进去也不会加载。它跟着 AuthMe 走：AuthMe 在哪台后端，它就装哪台后端。
+
+各组件的位置：
+
+| 组件 | 代理端 | 后端（跑 AuthMe 的服务器） |
+|------|--------|--------------------------|
+| Geyser | 装 | 不装 |
+| Floodgate | 装 | **也要装**（key.pem 和代理端同一把） |
+| AuthMe | 不装 | 装 |
+| FloodPass | 不装 | 装 |
+
+为什么后端也要一个 Floodgate？代理端的 Floodgate 只负责把基岩玩家的身份加密转发过来，真正解开这份身份、让后端插件认出"这是基岩玩家"的，是后端自己那份 Floodgate。只在前端装 Floodgate，后端插件认不出基岩玩家，别的要适配基岩的后端插件也是同一个道理。
+
+key.pem 的处理：把代理端 Floodgate 的 key.pem 复制一份，放进每个后端 Floodgate 的文件夹，两边文件必须一模一样。
+
+另外两件小事：
+
+- Velocity 记得开 modern forwarding，后端 Paper 的 forwarding-secret 要和它对上，不然身份传不到后端
+- 用了 AuthMe 的 /premium 的话，代理端还要装官方的 authme-velocity，后端 AuthMe 里配 `Hooks.bungeecord: true` 和同一个 `proxySharedSecret`
+
+装完拿基岩客户端连 Geyser 的端口（默认 UDP 19132），进服一秒左右看到自动登录的提示就成了。
+
+---
+
 ## 命令与权限
 
 | 命令 | 权限 | 说明 |
