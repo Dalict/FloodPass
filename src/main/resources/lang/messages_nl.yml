@@ -1,0 +1,14 @@
+# FloodPass messages (Dutch)
+# Kleurcodes gebruiken '&'. Een leeg bericht schakelt het uit.
+
+auto-login: "&aAutomatisch ingelogd via Xbox Live-verificatie."
+auto-register: "&aAutomatisch geregistreerd en ingelogd via Xbox Live-verificatie."
+
+command-reload-done: "&aConfiguratie en berichten opnieuw geladen."
+command-status-header: "&bFloodPass &fv{version}"
+command-status-state: "&7Ingeschakeld: {state}"
+command-status-delay: "&7Inlogvertraging: &f{ticks} &7ticks"
+command-status-auto-register: "&7Automatische registratie: {state}"
+command-status-usage: "&7Gebruik: &f/{label} reload"
+command-status-enabled: "&aaan"
+command-status-disabled: "&cuit"

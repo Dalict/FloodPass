@@ -1,0 +1,14 @@
+# FloodPass messages (English)
+# Color codes use '&'. Set a message to an empty string to disable it.
+
+auto-login: "&aSigned in automatically via Xbox Live verification."
+auto-register: "&aRegistered and signed in automatically via Xbox Live verification."
+
+command-reload-done: "&aConfiguration and messages reloaded."
+command-status-header: "&bFloodPass &fv{version}"
+command-status-state: "&7Enabled: {state}"
+command-status-delay: "&7Sign-in delay: &f{ticks} &7ticks"
+command-status-auto-register: "&7Auto register: {state}"
+command-status-usage: "&7Usage: &f/{label} reload"
+command-status-enabled: "&aon"
+command-status-disabled: "&coff"

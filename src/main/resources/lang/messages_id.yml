@@ -1,0 +1,14 @@
+# FloodPass messages (Indonesian)
+# Kode warna menggunakan '&'. Pesan kosong akan menonaktifkannya.
+
+auto-login: "&aMasuk otomatis melalui verifikasi Xbox Live."
+auto-register: "&aTerdaftar dan masuk otomatis melalui verifikasi Xbox Live."
+
+command-reload-done: "&aKonfigurasi dan pesan telah dimuat ulang."
+command-status-header: "&bFloodPass &fv{version}"
+command-status-state: "&7Diaktifkan: {state}"
+command-status-delay: "&7Jeda masuk: &f{ticks} &7tick"
+command-status-auto-register: "&7Registrasi otomatis: {state}"
+command-status-usage: "&7Penggunaan: &f/{label} reload"
+command-status-enabled: "&aaktif"
+command-status-disabled: "&cnonaktif"

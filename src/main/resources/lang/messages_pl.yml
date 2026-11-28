@@ -1,0 +1,14 @@
+# FloodPass messages (Polish)
+# Kody kolorów używają '&'. Pusty komunikat wyłącza go.
+
+auto-login: "&aAutomatycznie zalogowano przez weryfikację Xbox Live."
+auto-register: "&aAutomatycznie zarejestrowano i zalogowano przez weryfikację Xbox Live."
+
+command-reload-done: "&aKonfiguracja i komunikaty zostały ponownie wczytane."
+command-status-header: "&bFloodPass &fv{version}"
+command-status-state: "&7Włączone: {state}"
+command-status-delay: "&7Opóźnienie logowania: &f{ticks} &7ticków"
+command-status-auto-register: "&7Automatyczna rejestracja: {state}"
+command-status-usage: "&7Użycie: &f/{label} reload"
+command-status-enabled: "&awłączone"
+command-status-disabled: "&cwyłączone"

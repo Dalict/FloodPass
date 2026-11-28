@@ -1,0 +1,14 @@
+# FloodPass messages (Japanese)
+# カラーコードは '&' を使用します。空文字列にするとメッセージを無効化できます。
+
+auto-login: "&aXbox Live 認証により自動ログインしました。"
+auto-register: "&aXbox Live 認証により自動登録してログインしました。"
+
+command-reload-done: "&a設定とメッセージを再読み込みしました。"
+command-status-header: "&bFloodPass &fv{version}"
+command-status-state: "&7有効: {state}"
+command-status-delay: "&7ログイン遅延: &f{ticks} &7ティック"
+command-status-auto-register: "&7自動登録: {state}"
+command-status-usage: "&7使用方法: &f/{label} reload"
+command-status-enabled: "&aオン"
+command-status-disabled: "&cオフ"

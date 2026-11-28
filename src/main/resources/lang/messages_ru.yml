@@ -1,0 +1,14 @@
+# FloodPass messages (Russian)
+# Цветовые коды используйте '&'. Пустая строка отключает сообщение.
+
+auto-login: "&aАвтоматический вход выполнен через проверку Xbox Live."
+auto-register: "&aАвтоматическая регистрация и вход выполнены через проверку Xbox Live."
+
+command-reload-done: "&aКонфигурация и сообщения перезагружены."
+command-status-header: "&bFloodPass &fv{version}"
+command-status-state: "&7Включено: {state}"
+command-status-delay: "&7Задержка входа: &f{ticks} &7тиков"
+command-status-auto-register: "&7Автоматическая регистрация: {state}"
+command-status-usage: "&7Использование: &f/{label} reload"
+command-status-enabled: "&aвкл"
+command-status-disabled: "&cвыкл"
