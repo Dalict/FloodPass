@@ -41,13 +41,16 @@ public final class BedrockListener implements Listener {
 
     private final FloodPassPlugin plugin;
     private final Messages messages;
+    private final PreJoinBypassLedger preJoinLedger;
     private final SecureRandom random = new SecureRandom();
     private volatile Settings settings;
 
-    BedrockListener(FloodPassPlugin plugin, Settings settings, Messages messages) {
+    BedrockListener(FloodPassPlugin plugin, Settings settings, Messages messages,
+                    PreJoinBypassLedger preJoinLedger) {
         this.plugin = plugin;
         this.settings = settings;
         this.messages = messages;
+        this.preJoinLedger = preJoinLedger;
     }
 
     /**
@@ -85,6 +88,11 @@ public final class BedrockListener implements Listener {
             return;
         }
         Settings config = settings;
+        // Consume before the authentication check: when the pre-join dialog was
+        // bypassed, AuthMe signs registered players in by itself during join,
+        // and this record is the only way to tell that apart from a session
+        // that was already resumed.
+        PreJoinBypassLedger.Entry preJoin = preJoinLedger.consume(player.getUniqueId());
 
         // Fail-safe: if AuthMe or Floodgate got disabled or reloaded at runtime,
         // log the problem and leave the player to AuthMe's normal flow instead
@@ -94,7 +102,16 @@ public final class BedrockListener implements Listener {
 
             // Session resume or a prior hook may have signed the player in already.
             if (authMe.isAuthenticated(player)) {
-                debug(player.getName() + " is already authenticated, skipping");
+                if (preJoin != null) {
+                    // AuthMe performed the sign-in after our pre-join bypass;
+                    // confirm it to the player like a normal FloodPass login.
+                    String key = preJoin.wasRegistered() ? "auto-login" : "auto-register";
+                    messages.send(player, key);
+                    debug(player.getName() + " was signed in after the pre-join bypass,"
+                            + " sent " + key);
+                } else {
+                    debug(player.getName() + " is already authenticated, skipping");
+                }
                 return;
             }
 

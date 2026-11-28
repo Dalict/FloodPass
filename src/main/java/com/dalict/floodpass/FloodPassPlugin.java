@@ -25,8 +25,9 @@ public final class FloodPassPlugin extends JavaPlugin implements CommandExecutor
     private NameCheckBypass nameCheckBypass;
     private PremiumGuardHandle premiumConflictGuard;
 
-    /** 功能4：跳过 AuthMe 的 preJoin 阻塞对话框（仅基岩玩家） */
+    /** Skips AuthMe's blocking pre-join dialog for Floodgate players. */
     private PreJoinDialogBypass preJoinDialogBypass;
+    private PreJoinBypassLedger preJoinLedger;
     private Messages messages;
     private AuthMeNicknamePattern nicknamePattern;
     private AuthMeNicknameMessages nicknameMessages;
@@ -52,7 +53,8 @@ public final class FloodPassPlugin extends JavaPlugin implements CommandExecutor
         messages.extractBundledLanguages();
         messages.load(settings.getLanguage());
 
-        listener = new BedrockListener(this, settings, messages);
+        preJoinLedger = new PreJoinBypassLedger();
+        listener = new BedrockListener(this, settings, messages, preJoinLedger);
         getServer().getPluginManager().registerEvents(listener, this);
 
         nicknamePattern = new AuthMeNicknamePattern(this);
@@ -99,6 +101,9 @@ public final class FloodPassPlugin extends JavaPlugin implements CommandExecutor
         premiumConflictGuard = null;
         if (guard != null) {
             guard.unregister();
+        }
+        if (preJoinLedger != null) {
+            preJoinLedger.clear();
         }
     }
 
@@ -221,7 +226,8 @@ public final class FloodPassPlugin extends JavaPlugin implements CommandExecutor
             return;
         }
         AuthMePreJoinSettings authMePreJoin = new AuthMePreJoinSettings(this);
-        PreJoinDialogBypass bypass = new PreJoinDialogBypass(this, settings, authMePreJoin);
+        PreJoinDialogBypass bypass = new PreJoinDialogBypass(
+                this, settings, authMePreJoin, preJoinLedger);
         if (!bypass.isAvailable()) {
             if (authMePreJoin.isPreJoinDialogEnabled()) {
                 getLogger().warning("AuthMe's pre-join dialog is enabled, but this AuthMe version"

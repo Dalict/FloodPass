@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * AuthMe 6.x shows a login/register dialog during Paper's configuration phase
  * — after login, but <b>before</b> {@code PlayerJoinEvent}. While it waits on
  * that dialog, no auto-login plugin can act, so Bedrock players sit in the
- * dialog until the timeout kicks them ("登录超时").</p>
+ * dialog until the login timeout kicks them.</p>
  *
  * <p><b>Solution</b>: AuthMe's own public API {@code forceLoginFromProxy(String)}
  * queues a "trusted automatic login" for the name. AuthMe's configure-phase
@@ -41,6 +41,7 @@ public final class PreJoinDialogBypass implements Listener {
 
     private final FloodPassPlugin plugin;
     private final AuthMePreJoinSettings authMeSettings;
+    private final PreJoinBypassLedger ledger;
 
     /** AuthMe 6.x only; null on 5.x, which has no pre-join dialog. */
     private final Method forceLoginFromProxy;
@@ -49,10 +50,11 @@ public final class PreJoinDialogBypass implements Listener {
     private volatile Settings settings;
 
     PreJoinDialogBypass(FloodPassPlugin plugin, Settings settings,
-                        AuthMePreJoinSettings authMeSettings) {
+                        AuthMePreJoinSettings authMeSettings, PreJoinBypassLedger ledger) {
         this.plugin = plugin;
         this.settings = settings;
         this.authMeSettings = authMeSettings;
+        this.ledger = ledger;
         this.forceLoginFromProxy = resolveMethod();
     }
 
@@ -99,11 +101,23 @@ public final class PreJoinDialogBypass implements Listener {
             // No dialog, no need to queue anything
             return;
         }
+        // Read the registration state before queuing the login. AuthMe uses it
+        // later on the join thread, and BedrockListener uses it to pick the
+        // auto-login or auto-register confirmation message.
+        Boolean wasRegistered = null;
+        try {
+            wasRegistered = AuthMeApi.getInstance().isRegistered(event.getName());
+        } catch (Throwable error) {
+            debug("Could not read registration state for " + event.getName() + ": " + error);
+        }
         try {
             // forceLoginFromProxy(name) on a not-yet-joined player puts a trusted
             // auto-login request into AuthMe's proxy session queue. AuthMe sees it
             // when the configuration phase begins and skips the dialog entirely.
             forceLoginFromProxy.invoke(AuthMeApi.getInstance(), event.getName());
+            if (wasRegistered != null) {
+                ledger.record(event.getUniqueId(), wasRegistered);
+            }
             debug("Queued AuthMe auto-login for " + event.getName()
                     + " to skip its pre-join dialog");
         } catch (Throwable error) {
